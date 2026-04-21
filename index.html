@@ -29,7 +29,7 @@
         --alt-bg: #f0f4f8;
         --text: #1a1a2e;
         --muted: #6b7280;
-        --green: #1a7f5a;
+        --green: #25d366;
         --line: #e5e7eb;
         --f-display: "Cormorant Garamond", serif;
         --f-head: "Outfit", sans-serif;
@@ -50,11 +50,23 @@
 
       body {
         margin: 0;
+        padding-top: 72px;
         font-family: var(--f-body);
         color: var(--text);
         background: var(--white);
         line-height: 1.6;
         overflow-x: hidden;
+        opacity: 0;
+        animation: pageFadeIn 0.5s ease forwards;
+      }
+
+      @keyframes pageFadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
 
       a {
@@ -64,11 +76,13 @@
 
       img {
         max-width: 100%;
+        height: auto;
         display: block;
       }
 
       .container {
-        width: min(92vw, 1280px);
+        width: 90%;
+        max-width: 1200px;
         margin: 0 auto;
       }
 
@@ -81,8 +95,8 @@
 
       .reveal {
         opacity: 0;
-        transform: translateY(24px);
-        transition: opacity 0.8s var(--ease-out-premium), transform 0.8s var(--ease-out-premium);
+        transform: translateY(20px);
+        transition: opacity 0.7s var(--ease-out-premium), transform 0.7s var(--ease-out-premium);
       }
 
       .reveal.visible {
@@ -91,8 +105,10 @@
       }
 
       .site-nav {
-        position: sticky;
+        position: fixed;
         top: 0;
+        left: 0;
+        width: 100%;
         z-index: 1000;
         background: var(--white);
         border-bottom: 1px solid var(--line);
@@ -104,11 +120,11 @@
       }
 
       .nav-inner {
-        min-height: 76px;
+        min-height: 72px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 18px;
+        gap: 16px;
       }
 
       .brand {
@@ -119,7 +135,7 @@
 
       .brand strong {
         font-family: var(--f-head);
-        font-size: 1rem;
+        font-size: 0.97rem;
         color: var(--navy);
       }
 
@@ -132,19 +148,82 @@
       .nav-links {
         display: none;
         align-items: center;
-        gap: 20px;
+        gap: 18px;
         font-family: var(--f-head);
-        font-size: 0.92rem;
+        font-size: 0.9rem;
         font-weight: 500;
-        letter-spacing: 0.01em;
       }
 
-      .nav-links a {
-        padding-inline: 1px;
-        text-rendering: geometricPrecision;
+      .nav-links .nav-link {
+        position: relative;
+        padding: 3px 0;
+      }
+
+      .nav-links .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 100%;
+        height: 2px;
+        background: var(--amber);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s var(--ease-soft);
+      }
+
+      .nav-links .nav-link.active::after,
+      .nav-links .nav-link:hover::after {
+        transform: scaleX(1);
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #d4dbe5;
+        border-radius: 10px;
+        background: #fff;
+        color: var(--navy);
+      }
+
+      .menu-toggle svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .mobile-nav-overlay {
+        position: fixed;
+        inset: 72px 0 0;
+        background: rgba(10, 37, 64, 0.97);
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        padding: 28px 24px;
+        gap: 14px;
+        transform: translateY(-10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .mobile-nav-overlay.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .mobile-nav-overlay a {
+        color: #fff;
+        font-family: var(--f-head);
+        font-size: 1.1rem;
+        padding: 8px 0;
       }
 
       .book-pill {
+        display: none;
         background: var(--navy);
         color: #fff;
         padding: 11px 16px;
@@ -152,8 +231,6 @@
         font-family: var(--f-head);
         font-weight: 600;
         font-size: 0.88rem;
-        letter-spacing: 0.012em;
-        text-rendering: geometricPrecision;
         transition: transform 0.3s var(--ease-out-premium), box-shadow 0.3s var(--ease-soft);
       }
 
@@ -163,7 +240,9 @@
       }
 
       .hero {
-        min-height: calc(100vh - 76px);
+        min-height: 100vh;
+        margin-top: 0;
+        padding-top: 0;
       }
 
       .hero-wrap {
@@ -174,9 +253,10 @@
         background: var(--navy);
         color: #fff;
         position: relative;
-        padding: 42px 20px 24px;
+        padding: 44px 20px 28px;
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        text-align: center;
         justify-content: center;
         overflow: hidden;
       }
@@ -216,20 +296,18 @@
       .hero-title {
         margin: 0;
         font-family: var(--f-display);
-        font-size: clamp(2.5rem, 12vw, 4.5rem);
+        font-size: clamp(2.4rem, 10vw, 4.5rem);
         line-height: 0.92;
         letter-spacing: 0.2px;
-        max-width: 11ch;
       }
 
       .hero-line {
         display: block;
-        text-wrap: balance;
       }
 
       .hero-sub {
-        margin-top: 14px;
-        color: rgba(255, 255, 255, 0.88);
+        margin: 14px auto 0;
+        color: rgba(255, 255, 255, 0.9);
         font-size: 1rem;
         line-height: 1.54;
         max-width: 46ch;
@@ -239,6 +317,7 @@
         margin-top: 20px;
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
         gap: 10px;
       }
 
@@ -247,8 +326,6 @@
         padding: 12px 18px;
         font-family: var(--f-head);
         font-weight: 600;
-        letter-spacing: 0.012em;
-        text-rendering: geometricPrecision;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -290,20 +367,32 @@
       }
 
       .hero-right {
-        min-height: 420px;
+        min-height: 320px;
         position: relative;
+        overflow: hidden;
       }
 
-      .hero-right img {
+      .hero-right::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(10, 37, 64, 0.35);
+        z-index: 1;
+      }
+
+      .hero-clinic-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center;
+        filter: brightness(0.75);
       }
 
       .badge {
         position: absolute;
         right: 14px;
         bottom: 14px;
+        z-index: 2;
         background: var(--amber);
         color: #271f0b;
         font-family: var(--f-head);
@@ -313,8 +402,8 @@
       }
 
       .trust-bar {
-        border-bottom: 1px solid var(--line);
-        border-top: 1px solid var(--line);
+        border-top: 1px solid #e5e7eb;
+        border-bottom: 1px solid #e5e7eb;
         background: #fff;
       }
 
@@ -323,20 +412,82 @@
         padding: 14px 0;
         list-style: none;
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
-        font-size: 0.92rem;
       }
 
       .trust-list li {
+        opacity: 0;
+        transform: translateY(8px);
+        animation: trustFadeUp 0.45s var(--ease-out-premium) forwards;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
+        font-family: var(--f-label);
+        font-size: 11px;
+        letter-spacing: 1.05px;
+        text-transform: uppercase;
         color: #344155;
+        border-left: 2px solid var(--amber);
+        padding: 8px 10px;
+      }
+
+      .trust-list li:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      .trust-list li:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+
+      .trust-list li:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+
+      .trust-list li:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+
+      .trust-list li:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+
+      .trust-icon {
+        width: 16px;
+        height: 16px;
+        color: var(--navy);
+        flex: 0 0 auto;
+      }
+
+      @keyframes trustFadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       section {
         padding: var(--section-pad) 0;
+      }
+
+      #about {
+        position: relative;
+        overflow: hidden;
+      }
+
+      #about::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("clinic.jpg") center / cover no-repeat;
+        opacity: 0.06;
+        filter: grayscale(100%);
+        pointer-events: none;
+      }
+
+      #about .container {
+        position: relative;
+        z-index: 1;
       }
 
       .about-wrap {
@@ -346,27 +497,37 @@
       }
 
       .photo-frame {
-        border: 3px solid var(--navy);
-        padding: 10px;
+        border-radius: 12px;
         position: relative;
         background: #fff;
+        overflow: hidden;
       }
 
-      .photo-frame::before {
-        content: "";
-        position: absolute;
-        width: 80px;
-        height: 80px;
-        right: -8px;
-        top: -8px;
-        border-right: 6px solid var(--amber);
-        border-top: 6px solid var(--amber);
-      }
-
-      .photo-frame img {
+      .doctor-photo {
         width: 100%;
-        aspect-ratio: 4/5;
+        max-width: 100%;
+        border-radius: 12px;
+        border: 4px solid #d4a843;
         object-fit: cover;
+        object-position: center top;
+        box-shadow: 0 20px 60px rgba(10, 37, 64, 0.15);
+        aspect-ratio: 4/5;
+      }
+
+      .credential-badge {
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        background: var(--navy);
+        color: #fff;
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-family: var(--f-head);
+        font-size: 0.76rem;
+        font-weight: 600;
+        line-height: 1.2;
+        text-align: center;
       }
 
       .about-content h2 {
@@ -393,7 +554,7 @@
         color: #263752;
       }
 
-      blockquote {
+      .about-quote {
         margin: 14px 0;
         padding: 8px 0 8px 14px;
         border-left: 3px solid var(--amber);
@@ -401,6 +562,14 @@
         font-family: var(--f-display);
         font-style: italic;
         font-size: 1.25rem;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+
+      .about-quote.visible {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .mini-stats {
@@ -437,7 +606,6 @@
         color: var(--navy);
         font-size: clamp(2rem, 7vw, 3.3rem);
         line-height: 1.04;
-        letter-spacing: 0.1px;
       }
 
       .condition-grid {
@@ -451,43 +619,58 @@
         grid-template-columns: auto 1fr;
         gap: 12px;
         background: #fff;
-        border: 1px solid #dbe3ec;
+        border: 1px solid #e5e7eb;
         padding: 14px;
-        transition:
-          border-color 0.3s var(--ease-soft),
-          transform 0.3s var(--ease-out-premium),
-          box-shadow 0.3s var(--ease-soft),
-          background-color 0.3s var(--ease-soft);
+        border-left: 1px solid #e5e7eb;
+        opacity: 0;
+        transform: translateY(16px);
+        transition: transform 0.35s var(--ease-out-premium), box-shadow 0.35s var(--ease-soft),
+          border-left-color 0.35s var(--ease-soft), opacity 0.45s ease;
+      }
+
+      .condition-card.visible {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .condition-card:hover {
         transform: translateY(-3px);
-        border-color: #bdcadb;
-        box-shadow: 0 10px 22px rgba(10, 37, 64, 0.08);
-        background-color: #fcfdff;
+        border-left: 3px solid #d4a843;
+        box-shadow: 0 8px 30px rgba(10, 37, 64, 0.08);
       }
 
       .condition-icon {
-        width: 30px;
-        height: 30px;
-        border-radius: 6px;
-        background: #e8eef5;
-        display: grid;
-        place-items: center;
-        font-size: 0.95rem;
+        width: 28px;
+        height: 28px;
+        color: #0a2540;
+        flex: 0 0 auto;
+      }
+
+      .condition-icon path,
+      .condition-icon circle,
+      .condition-icon line,
+      .condition-icon polyline,
+      .condition-icon rect {
+        stroke: #0a2540;
+        stroke-width: 1.5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
 
       .condition-card h3 {
         margin: 0;
         font-family: var(--f-head);
-        font-size: 1rem;
-        color: #152c47;
+        font-weight: 600;
+        font-size: 16px;
+        color: #0a2540;
       }
 
       .condition-card p {
         margin: 3px 0 0;
-        color: var(--muted);
-        font-size: 0.9rem;
+        font-family: var(--f-body);
+        font-size: 14px;
+        color: #6b7280;
       }
 
       .approach-grid {
@@ -499,11 +682,18 @@
 
       .approach-card {
         border: 1px solid #e5e7eb;
-        border-top: 4px solid var(--amber);
-        padding: 18px;
-        background:
-          linear-gradient(180deg, #ffffff 0%, #ffffff 72%, #f7f0dd 100%);
-        transition: transform 0.3s var(--ease-out-premium), box-shadow 0.3s var(--ease-soft);
+        border-top: 3px solid var(--amber);
+        padding: 40px 32px;
+        background: linear-gradient(135deg, #ffffff 0%, #faf8f4 100%);
+        opacity: 0;
+        transform: translateY(18px);
+        transition: transform 0.45s var(--ease-out-premium), box-shadow 0.35s var(--ease-soft),
+          opacity 0.45s ease;
+      }
+
+      .approach-card.visible {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .approach-card:hover {
@@ -512,23 +702,51 @@
       }
 
       .approach-card.mid {
-        margin-top: 0;
+        border: 1px solid #d4a843;
       }
 
       .approach-card .icon {
-        font-size: 1.5rem;
+        width: 48px;
+        height: 48px;
+        color: var(--navy);
+      }
+
+      .approach-card .icon path,
+      .approach-card .icon line,
+      .approach-card .icon circle,
+      .approach-card .icon polyline,
+      .approach-card .icon rect {
+        stroke: #0a2540;
+        stroke-width: 1.7;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
 
       .approach-card h3 {
-        margin: 10px 0 6px;
+        margin: 14px 0 8px;
         font-family: var(--f-head);
-        font-size: 1.3rem;
+        font-weight: 700;
+        font-size: 20px;
         color: var(--navy);
       }
 
       .approach-card p {
         margin: 0;
-        color: var(--muted);
+        color: #6b7280;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .approach-points {
+        margin: 12px 0 0;
+        padding-left: 18px;
+        color: #3f4d63;
+      }
+
+      .approach-points li {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
       }
 
       .branches-list {
@@ -636,25 +854,40 @@
 
       .testimonials-wrap {
         max-width: 900px;
+      }
+
+      .testimonial-card {
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        padding: 28px;
         position: relative;
+        overflow: hidden;
       }
 
       .quote-mark {
         color: var(--amber);
         font-family: var(--f-display);
-        font-size: 5rem;
-        line-height: 0.9;
+        font-size: 4.2rem;
+        line-height: 0.8;
+      }
+
+      .testimonial-content {
+        opacity: 0;
+        transform: translateX(20px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+      }
+
+      .testimonial-content.ready {
+        opacity: 1;
+        transform: translateX(0);
       }
 
       .testimonial-text {
         margin: 0;
         font-family: var(--f-display);
-        font-size: clamp(1.45rem, 4.2vw, 2.5rem);
+        font-size: clamp(1.35rem, 4vw, 2.1rem);
         color: var(--navy);
-        line-height: 1.25;
-        max-width: 29ch;
-        text-wrap: balance;
-        transition: opacity 0.28s var(--ease-soft), transform 0.28s var(--ease-out-premium);
+        line-height: 1.3;
       }
 
       .stars {
@@ -669,15 +902,24 @@
         color: #4b5563;
         font-family: var(--f-label);
         font-size: 0.72rem;
-        letter-spacing: 1.25px;
+        letter-spacing: 1.2px;
         text-transform: uppercase;
-        transition: opacity 0.28s var(--ease-soft), transform 0.28s var(--ease-out-premium);
       }
 
-      .testimonial-text.is-swapping,
-      .testimonial-meta.is-swapping {
-        opacity: 0;
-        transform: translateY(6px);
+      .testimonial-progress {
+        margin-top: 14px;
+        height: 4px;
+        background: #e5e7eb;
+        overflow: hidden;
+      }
+
+      .testimonial-progress-bar {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: var(--amber);
+        transform-origin: left;
+        transform: scaleX(0);
       }
 
       .controls {
@@ -694,13 +936,33 @@
         cursor: pointer;
         font-size: 1.1rem;
         transition: transform 0.25s var(--ease-out-premium), border-color 0.25s var(--ease-soft),
-          color 0.25s var(--ease-soft);
+          color 0.25s var(--ease-soft), background-color 0.25s var(--ease-soft);
       }
 
       .controls button:hover {
         transform: translateY(-2px);
         border-color: #9eaec5;
         color: var(--navy);
+        background: #f7fafc;
+      }
+
+      .testimonial-dots {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+      }
+
+      .testimonial-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        border: 0;
+        background: #cbd5e1;
+        padding: 0;
+      }
+
+      .testimonial-dot.active {
+        background: var(--amber);
       }
 
       .appointment {
@@ -737,8 +999,15 @@
       }
 
       .field {
-        position: relative;
         margin-bottom: 14px;
+      }
+
+      .field label {
+        display: block;
+        margin-bottom: 6px;
+        color: #334155;
+        font-size: 0.86rem;
+        font-weight: 600;
       }
 
       .field input,
@@ -747,40 +1016,41 @@
         width: 100%;
         border: 1px solid #ccd5e1;
         background: #fff;
-        padding: 14px 12px 10px;
+        padding: 11px 12px;
         font-size: 0.95rem;
         font-family: var(--f-body);
         outline: none;
-      }
-
-      .field label {
-        position: absolute;
-        left: 12px;
-        top: 12px;
-        color: #64748b;
-        font-size: 0.82rem;
-        pointer-events: none;
-        transition: transform 0.24s var(--ease-out-premium), font-size 0.24s var(--ease-soft),
-          color 0.24s var(--ease-soft);
-        background: #fff;
-        padding: 0 4px;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
       }
 
       .field input:focus,
       .field select:focus,
       .field textarea:focus {
-        border-color: var(--amber);
+        border: 2px solid var(--amber);
+        box-shadow: 0 0 0 4px rgba(212, 168, 67, 0.12);
       }
 
-      .field input:focus + label,
-      .field input:not(:placeholder-shown) + label,
-      .field textarea:focus + label,
-      .field textarea:not(:placeholder-shown) + label,
-      .field select:focus + label,
-      .field select:valid + label {
-        transform: translateY(-18px);
-        font-size: 0.68rem;
-        color: #88661c;
+      .field input.invalid,
+      .field select.invalid,
+      .field textarea.invalid {
+        border: 2px solid #dc2626;
+      }
+
+      .phone-wrap {
+        display: flex;
+      }
+
+      .phone-prefix {
+        border: 1px solid #ccd5e1;
+        border-right: 0;
+        padding: 11px 10px;
+        background: #f8fafc;
+        color: #334155;
+        font-weight: 600;
+      }
+
+      .phone-wrap input {
+        border-left: 0;
       }
 
       .submit {
@@ -794,6 +1064,27 @@
         margin-top: 8px;
         color: var(--muted);
         font-size: 0.8rem;
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%) translateY(16px);
+        background: #15803d;
+        color: #fff;
+        font-size: 0.9rem;
+        padding: 10px 14px;
+        border-radius: 8px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        z-index: 1200;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
       }
 
       .footer {
@@ -858,16 +1149,26 @@
         background: var(--green);
         color: #fff;
         border-radius: 999px;
-        padding: 12px 15px;
+        width: 56px;
+        height: 56px;
+        display: grid;
+        place-items: center;
         font-family: var(--f-head);
-        font-size: 0.86rem;
-        font-weight: 600;
-        transition: transform 0.25s var(--ease-out-premium), box-shadow 0.25s var(--ease-soft);
+        font-size: 0.72rem;
+        font-weight: 700;
+        animation: pulse 3s infinite;
       }
 
-      .float-wa:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 20px rgba(26, 127, 90, 0.35);
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+        }
+        70% {
+          box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+        }
       }
 
       .mobile-call {
@@ -885,64 +1186,45 @@
         font-weight: 600;
       }
 
-      @media (min-width: 375px) {
-        .hero-left {
-          padding-inline: 24px;
-        }
-
-        .hero-title {
-          line-height: 0.91;
-          letter-spacing: 0.15px;
-        }
-
-        .hero-sub {
-          max-width: 34ch;
-          font-size: 0.98rem;
-        }
-
-        .section-title {
-          margin-bottom: 28px;
-          line-height: 1.05;
-        }
-
-        .hero-line-1,
-        .hero-line-2 {
-          white-space: nowrap;
-        }
-      }
-
       @media (min-width: 768px) {
+        .menu-toggle,
+        .mobile-nav-overlay {
+          display: none;
+        }
+
         .nav-links {
           display: flex;
+        }
+
+        .book-pill {
+          display: inline-flex;
         }
 
         .hero-wrap {
           grid-template-columns: 55% 45%;
         }
 
-        .hero-right {
-          min-height: calc(100vh - 76px);
+        .hero-left {
+          min-height: 100vh;
+          text-align: left;
+          align-items: flex-start;
+          padding: 52px 40px 32px;
         }
 
-        .hero-left {
-          min-height: calc(100vh - 76px);
-          padding: 52px 40px 32px;
+        .hero-cta {
+          justify-content: flex-start;
+        }
+
+        .hero-right {
+          min-height: 100vh;
         }
 
         .hero-title {
           font-size: clamp(3.1rem, 7vw, 4.8rem);
-          max-width: 10.5ch;
-          line-height: 0.9;
         }
 
         .hero-sub {
-          max-width: 45ch;
-          font-size: 1rem;
-          line-height: 1.5;
-        }
-
-        .testimonial-text {
-          max-width: 30ch;
+          margin-inline: 0;
         }
 
         .hero-stats {
@@ -951,7 +1233,6 @@
 
         .trust-list {
           grid-template-columns: repeat(5, minmax(0, 1fr));
-          font-size: 0.84rem;
           gap: 12px;
         }
 
@@ -960,26 +1241,30 @@
           gap: 42px;
         }
 
+        .about-content {
+          order: 1;
+        }
+
+        .photo-frame {
+          order: 2;
+          justify-self: end;
+          max-width: 420px;
+        }
+
         .mini-stats {
           grid-template-columns: repeat(3, minmax(0, 1fr));
         }
 
         .condition-grid {
           grid-template-columns: 1fr 1fr;
-          column-gap: 14px;
-          row-gap: 14px;
-        }
-
-        .section-title {
-          margin-bottom: 32px;
         }
 
         .approach-grid {
           grid-template-columns: repeat(3, minmax(0, 1fr));
         }
 
-        .approach-card.mid {
-          margin-top: 30px;
+        .approach-card {
+          padding: 30px 24px;
         }
 
         .home-grid {
@@ -1004,62 +1289,29 @@
         .mobile-call {
           display: none;
         }
+
+        .float-wa {
+          width: auto;
+          height: auto;
+          padding: 12px 15px;
+          font-size: 0.86rem;
+          font-weight: 600;
+        }
       }
 
       @media (min-width: 1024px) {
         .hero-title {
           font-size: clamp(4rem, 5.2vw, 5.2rem);
-          max-width: 10.35ch;
           line-height: 0.89;
-          letter-spacing: 0.1px;
         }
 
         .hero-sub {
-          max-width: 44ch;
           font-size: 1.01rem;
           line-height: 1.52;
         }
 
-        .testimonial-text {
-          max-width: 31ch;
-          line-height: 1.23;
-        }
-
-        .section-title {
-          font-size: clamp(2.35rem, 3.4vw, 3.35rem);
-          line-height: 1.03;
-          margin-bottom: 34px;
-        }
-
-        .about-content h2 {
-          font-size: clamp(2.5rem, 3.8vw, 3.35rem);
-          line-height: 0.98;
-        }
-      }
-
-      @media (min-width: 1280px) {
-        .container {
-          width: min(90vw, 1320px);
-        }
-
-        .hero-title {
-          font-size: clamp(4.8rem, 6vw, 5.9rem);
-          max-width: 10.2ch;
-          line-height: 0.88;
-        }
-
-        .hero-sub {
-          max-width: 43ch;
-          font-size: 1.02rem;
-        }
-
-        .testimonial-text {
-          max-width: 32ch;
-          line-height: 1.22;
-        }
-
-        .section-title {
-          font-size: clamp(2.6rem, 3.5vw, 3.8rem);
+        .approach-card {
+          padding: 40px 32px;
         }
       }
 
@@ -1071,7 +1323,11 @@
           scroll-behavior: auto !important;
         }
 
-        .reveal {
+        .reveal,
+        .condition-card,
+        .approach-card,
+        .testimonial-content,
+        .about-quote {
           opacity: 1;
           transform: none;
         }
@@ -1087,15 +1343,32 @@
         </a>
 
         <nav class="nav-links" aria-label="Primary navigation">
-          <a href="#about">About</a>
-          <a href="#conditions">Conditions</a>
-          <a href="#approach">Approach</a>
-          <a href="#branches">Branches</a>
-          <a href="#testimonials">Reviews</a>
+          <a href="#home" class="nav-link">Home</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#conditions" class="nav-link">Conditions</a>
+          <a href="#approach" class="nav-link">Approach</a>
+          <a href="#branches" class="nav-link">Branches</a>
+          <a href="#testimonials" class="nav-link">Reviews</a>
         </nav>
+
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
 
         <a href="#appointment" class="book-pill">Book Appointment</a>
       </div>
+
+      <nav class="mobile-nav-overlay" id="mobileNav" aria-label="Mobile navigation">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#conditions">Conditions</a>
+        <a href="#approach">Approach</a>
+        <a href="#branches">Branches</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#appointment">Book Appointment</a>
+      </nav>
     </header>
 
     <main id="home">
@@ -1127,9 +1400,10 @@
 
           <div class="hero-right reveal">
             <img
-              src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1600&q=80"
-              alt="Physiotherapy treatment session"
-              loading="eager"
+              src="clinic.jpg"
+              alt="Ortho Neuro Spine Clinic consultation room in Patna"
+              class="hero-clinic-image"
+              loading="lazy"
             />
             <div class="badge">Ex-Paras HMRI Hospital, Patna</div>
           </div>
@@ -1139,11 +1413,41 @@
       <section class="trust-bar">
         <div class="container">
           <ul class="trust-list reveal">
-            <li><span>🏥</span> Ex-Paras HMRI Hospital</li>
-            <li><span>📍</span> 3 Branches in Patna</li>
-            <li><span>🏠</span> Home Visits Available</li>
-            <li><span>✅</span> Pain & Paralysis Certified</li>
-            <li><span>⏱️</span> Same-Day Appointments</li>
+            <li>
+              <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.6" />
+              </svg>
+              Ex-Paras HMRI Hospital
+            </li>
+            <li>
+              <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" stroke="currentColor" stroke-width="1.8" />
+                <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.8" />
+              </svg>
+              3 Branches in Patna
+            </li>
+            <li>
+              <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M3 11.5 12 4l9 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                <path d="M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" />
+              </svg>
+              Home Visits Available
+            </li>
+            <li>
+              <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3 5 6v5c0 5 3.5 8 7 10 3.5-2 7-5 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.8" />
+                <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+              Pain & Paralysis Certified
+            </li>
+            <li>
+              <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
+                <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+              Same-Day Appointments
+            </li>
           </ul>
         </div>
       </section>
@@ -1152,10 +1456,12 @@
         <div class="container about-wrap">
           <div class="photo-frame reveal">
             <img
-              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&q=80"
-              alt="Doctor portrait frame"
+              src="doctor.jpg"
+              alt="Dr. Tirupati Sadhike, Pain and Paralysis Specialist, Patna"
+              class="doctor-photo"
               loading="lazy"
             />
+            <div class="credential-badge">BPT, MPT, AIAP | Pain &amp; Paralysis Specialist</div>
           </div>
 
           <div class="about-content reveal">
@@ -1171,18 +1477,18 @@
               Patna. At Ortho Neuro Spine - Physiotherapy & Rehab Clinic, Dr. Sadhike focuses on practical,
               patient-friendly recovery plans that build confidence and reduce pain.
             </p>
-            <blockquote>Every patient deserves to move freely and live without pain.</blockquote>
+            <blockquote class="about-quote" id="aboutQuote">Every patient deserves to move freely and live without pain.</blockquote>
             <div class="mini-stats">
               <article class="mini-stat">
-                <h3>12+ Years</h3>
+                <h3><span class="counter" data-target="12" data-suffix="+ Years">0</span></h3>
                 <p>Clinical Experience</p>
               </article>
               <article class="mini-stat">
-                <h3>10,000+</h3>
+                <h3><span class="counter" data-target="10000" data-suffix="+">0</span></h3>
                 <p>Patients Treated</p>
               </article>
               <article class="mini-stat">
-                <h3>11+</h3>
+                <h3><span class="counter" data-target="11" data-suffix="+">0</span></h3>
                 <p>Specializations</p>
               </article>
             </div>
@@ -1197,77 +1503,77 @@
 
           <div class="condition-grid reveal">
             <article class="condition-card">
-              <span class="condition-icon">🦴</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7a2.5 2.5 0 0 1 3.5 0l3 3a2.5 2.5 0 0 1 0 3.5l-3 3a2.5 2.5 0 0 1-3.5 0l-1-1a2.5 2.5 0 0 1 0-3.5l1-1-1-1A2.5 2.5 0 0 1 7 7Z"/></svg>
               <div>
                 <h3>Back Pain</h3>
                 <p>Lumbar spine strain and chronic lower back conditions</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">🧠</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5a3 3 0 0 0-3 3v1a3 3 0 0 0 2 2.8V13a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3v-1.2A3 3 0 0 0 19 9V8a3 3 0 0 0-3-3"/><path d="M10 16v3M14 16v3"/></svg>
               <div>
                 <h3>Neck Pain</h3>
                 <p>Cervical disc issues and postural neck disorders</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">🦵</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4v7l3 2v7M10 20h5"/></svg>
               <div>
                 <h3>Knee Pain</h3>
                 <p>Ligament injuries, arthritis, and post-surgical rehab</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">💪</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14c1-2 2-3 4-3h2l2 2h3a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-5l-2 2H7a2 2 0 0 1-2-2v-1c0-1 .4-2 1-3Z"/></svg>
               <div>
                 <h3>Shoulder Pain</h3>
                 <p>Rotator cuff and frozen shoulder conditions</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">🧬</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5c2 3 6 4 8 7 2 3 .5 7-2.5 7S8 16 10 13c2-3 6-4 8-7"/></svg>
               <div>
                 <h3>Paralysis</h3>
                 <p>Stroke and nerve damage rehabilitation</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">⚡</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-7 11h5l-1 9 8-12h-5l1-8Z"/></svg>
               <div>
                 <h3>Sciatica</h3>
                 <p>Sciatic nerve compression and radiating leg pain</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">🩺</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M8 8V5h8v3M7 8v6a5 5 0 1 0 10 0V8"/></svg>
               <div>
                 <h3>Slip Disc</h3>
                 <p>Herniated disc treatment and spinal decompression</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">📏</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v16M15 4v16M9 8h6M9 12h6M9 16h6"/></svg>
               <div>
                 <h3>Spine Problems</h3>
                 <p>Scoliosis, kyphosis, and spinal alignment</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">🖐️</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12V7a1 1 0 1 1 2 0v4M9 11V6a1 1 0 1 1 2 0v5M11 11V7a1 1 0 1 1 2 0v4M13 11V8a1 1 0 1 1 2 0v3M7 12c0 4 2 7 5 7s5-3 5-7"/></svg>
               <div>
                 <h3>Nerve Compression</h3>
                 <p>Carpal tunnel and peripheral neuropathy</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">🧍</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M12 7v6M8 21l4-8 4 8"/></svg>
               <div>
                 <h3>Joint Stiffness</h3>
                 <p>Mobility restoration and joint mobilization</p>
               </div>
             </article>
             <article class="condition-card">
-              <span class="condition-icon">🏃</span>
+              <svg class="condition-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="15" cy="5" r="2"/><path d="m8 13 3-3 3 1 2 4M7 20l4-6m4 0 2 6"/></svg>
               <div>
                 <h3>Frozen Shoulder</h3>
                 <p>Shoulder capsule tightness and restricted movement rehab</p>
@@ -1282,21 +1588,36 @@
           <div class="label" style="color: #7e5f1f">Three Pillars of Our Clinical Approach</div>
           <h2 class="section-title">Focused treatment pathways for predictable progress.</h2>
 
-          <div class="approach-grid reveal">
+          <div class="approach-grid">
             <article class="approach-card">
-              <div class="icon">🏥</div>
+              <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 28c0-4 3-7 7-7h3l4 4h7c4 0 7 3 7 7v4H10v-4Z"/><circle cx="17" cy="18" r="4"/></svg>
               <h3>Orthopaedic Rehab</h3>
               <p>Bone, joint, and muscle recovery programs.</p>
+              <ul class="approach-points">
+                <li>Ligament and tendon rehabilitation</li>
+                <li>Post-fracture mobility restoration</li>
+                <li>Post-surgery strengthening protocols</li>
+              </ul>
             </article>
             <article class="approach-card mid">
-              <div class="icon">🧠</div>
+              <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M18 10a7 7 0 0 0-7 7v2a7 7 0 0 0 4 6v2a7 7 0 0 0 7 7h4a7 7 0 0 0 7-7v-2a7 7 0 0 0 4-6v-2a7 7 0 0 0-7-7"/><path d="M22 34v4M26 34v4"/></svg>
               <h3>Neuro Rehabilitation</h3>
               <p>Paralysis, stroke recovery, and nerve care.</p>
+              <ul class="approach-points">
+                <li>Stroke functional retraining</li>
+                <li>Balance and gait restoration</li>
+                <li>Home neuro-therapy planning</li>
+              </ul>
             </article>
             <article class="approach-card">
-              <div class="icon">🦴</div>
+              <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8v32"/><path d="M19 13h10M18 19h12M17 25h14M18 31h12M19 37h10"/></svg>
               <h3>Spine & Disc Care</h3>
               <p>Non-surgical disc and spine treatment.</p>
+              <ul class="approach-points">
+                <li>Slip disc decompression protocols</li>
+                <li>Postural correction programs</li>
+                <li>Sciatica pain management plans</li>
+              </ul>
             </article>
           </div>
         </div>
@@ -1311,7 +1632,7 @@
               <span class="branch-number">01</span>
               <h3>Boring Road</h3>
               <p>Jamuna Appartment, Patna</p>
-              <a href="https://www.google.com/maps/search/?api=1&query=Jamuna+Appartment+Boring+Road+Patna" target="_blank" rel="noopener"
+              <a href="https://www.google.com/maps/search/?api=1&query=Jamuna+Appartment+Boring+Road+Patna" target="_blank" rel="noopener noreferrer"
                 >Get Directions -></a
               >
             </article>
@@ -1323,7 +1644,7 @@
               <a
                 href="https://www.google.com/maps/search/?api=1&query=Income+Tax+Golambar+Sri+Krishna+Nagar+Patna"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
                 >Get Directions -></a
               >
             </article>
@@ -1332,7 +1653,7 @@
               <span class="branch-number">03</span>
               <h3>Kankarbagh</h3>
               <p>Sudama Palace, Patna</p>
-              <a href="https://www.google.com/maps/search/?api=1&query=Sudama+Palace+Kankarbagh+Patna" target="_blank" rel="noopener"
+              <a href="https://www.google.com/maps/search/?api=1&query=Sudama+Palace+Kankarbagh+Patna" target="_blank" rel="noopener noreferrer"
                 >Get Directions -></a
               >
             </article>
@@ -1356,7 +1677,7 @@
               Home Visit Available for patients who need professional physiotherapy in the comfort of home.
               Fast scheduling, clear communication, trusted care.
             </p>
-            <a class="btn btn-amber" href="https://wa.me/919693614502" target="_blank" rel="noopener">WhatsApp Now</a>
+            <a class="btn btn-amber" href="https://wa.me/919693614502" target="_blank" rel="noopener noreferrer">WhatsApp Now</a>
           </div>
 
           <ol class="steps reveal">
@@ -1378,16 +1699,23 @@
 
       <section id="testimonials">
         <div class="container testimonials-wrap reveal">
-          <div class="quote-mark">"</div>
-          <p class="testimonial-text" id="testimonialText">
-            Dr. Sadhike treated my lower back pain with a clear step-by-step plan. Within weeks, I was able to
-            walk and work without fear.
-          </p>
-          <div class="stars">★★★★★</div>
-          <div class="testimonial-meta" id="testimonialMeta">Amit R. - Boring Road</div>
-          <div class="controls">
-            <button type="button" id="prevBtn" aria-label="Previous testimonial">←</button>
-            <button type="button" id="nextBtn" aria-label="Next testimonial">→</button>
+          <div class="testimonial-card" id="testimonialCard">
+            <div class="quote-mark">"</div>
+            <div class="testimonial-content ready" id="testimonialContent">
+              <p class="testimonial-text" id="testimonialText"></p>
+              <div class="stars">★★★★★</div>
+              <div class="testimonial-meta" id="testimonialMeta"></div>
+            </div>
+            <div class="testimonial-progress"><span class="testimonial-progress-bar" id="testimonialProgress"></span></div>
+            <div class="controls">
+              <button type="button" id="prevBtn" aria-label="Previous testimonial">←</button>
+              <button type="button" id="nextBtn" aria-label="Next testimonial">→</button>
+            </div>
+            <div class="testimonial-dots" id="testimonialDots">
+              <button class="testimonial-dot" type="button" aria-label="Testimonial 1"></button>
+              <button class="testimonial-dot" type="button" aria-label="Testimonial 2"></button>
+              <button class="testimonial-dot" type="button" aria-label="Testimonial 3"></button>
+            </div>
           </div>
         </div>
       </section>
@@ -1402,39 +1730,42 @@
             <p>Ex-Physiotherapist, Paras HMRI Hospital, Patna</p>
             <p><strong>Phone:</strong> +91 96936 14502</p>
             <p><strong>Clinic:</strong> Ortho Neuro Spine - Physiotherapy & Rehab Clinic</p>
-            <p><strong>Brand:</strong> First Choice Physio</p>
+            <p><strong>Timings:</strong> Mon - Sat: 9:00 AM - 7:00 PM</p>
           </aside>
 
           <form class="form reveal" id="appointmentForm">
             <div class="field">
-              <input id="fullName" name="fullName" type="text" placeholder=" " required />
-              <label for="fullName">Full Name</label>
+              <label for="name">Full Name</label>
+              <input id="name" name="name" type="text" required />
             </div>
 
             <div class="field">
-              <input id="mobile" name="mobile" type="tel" placeholder=" " pattern="[0-9]{10}" required />
-              <label for="mobile">Mobile Number</label>
+              <label for="phone">Mobile Number</label>
+              <div class="phone-wrap">
+                <span class="phone-prefix">+91</span>
+                <input id="phone" name="phone" type="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" required />
+              </div>
             </div>
 
             <div class="field">
-              <textarea id="problem" name="problem" placeholder=" " rows="4" required></textarea>
-              <label for="problem">Condition / Problem</label>
+              <label for="condition">Condition / Problem</label>
+              <textarea id="condition" name="condition" rows="4" required></textarea>
             </div>
 
             <div class="field">
-              <select id="preferredBranch" name="preferredBranch" required>
-                <option value="" selected disabled hidden></option>
-                <option>Boring Road, Jamuna Appartment, Patna</option>
-                <option>Sri Krishna Nagar, Income Tax Golambar, Patna</option>
-                <option>Kankarbagh, Sudama Palace, Patna</option>
-                <option>Home Visit</option>
+              <label for="branch">Preferred Branch</label>
+              <select id="branch" name="branch" required>
+                <option value="" selected>Select branch</option>
+                <option value="Boring Road, Jamuna Appartment, Patna">Boring Road, Jamuna Appartment, Patna</option>
+                <option value="Sri Krishna Nagar, Income Tax Golambar, Patna">Sri Krishna Nagar, Income Tax Golambar, Patna</option>
+                <option value="Kankarbagh, Sudama Palace, Patna">Kankarbagh, Sudama Palace, Patna</option>
+                <option value="Home Visit">Home Visit</option>
               </select>
-              <label for="preferredBranch">Preferred Branch</label>
             </div>
 
             <div class="field">
-              <input id="preferredDate" name="preferredDate" type="date" placeholder=" " required />
-              <label for="preferredDate">Preferred Date</label>
+              <label for="date">Preferred Date</label>
+              <input id="date" name="date" type="date" required />
             </div>
 
             <button class="btn btn-amber submit" type="submit">Submit on WhatsApp -></button>
@@ -1465,7 +1796,7 @@
           <div>
             <h3>Contact + Social</h3>
             <p><a href="tel:+919693614502">+91 96936 14502</a></p>
-            <p><a href="https://wa.me/919693614502" target="_blank" rel="noopener">WhatsApp</a></p>
+            <p><a href="https://wa.me/919693614502" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
             <p>Home Visit Available</p>
           </div>
         </div>
@@ -1476,57 +1807,112 @@
       </div>
     </footer>
 
-    <a class="float-wa" href="https://wa.me/919693614502" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">WhatsApp</a>
+    <a class="float-wa" href="https://wa.me/919693614502" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">WA</a>
     <a class="mobile-call" href="tel:+919693614502" aria-label="Call clinic">Call Now</a>
+    <div class="toast" id="successToast">Opening WhatsApp... We'll respond within 30 minutes.</div>
 
     <script>
       const siteNav = document.getElementById("siteNav");
       const revealEls = document.querySelectorAll(".reveal");
       const yearEl = document.getElementById("year");
+      const menuToggle = document.getElementById("menuToggle");
+      const mobileNav = document.getElementById("mobileNav");
+      const navLinks = document.querySelectorAll(".nav-link");
+      const sections = document.querySelectorAll("main section[id], main[id]");
+      const counters = document.querySelectorAll(".counter");
+      const aboutSection = document.getElementById("about");
+      const aboutQuote = document.getElementById("aboutQuote");
+      const conditionCards = document.querySelectorAll(".condition-card");
+      const approachCards = document.querySelectorAll(".approach-card");
+
       const form = document.getElementById("appointmentForm");
+      const toast = document.getElementById("successToast");
+      const nameInput = document.getElementById("name");
+      const phoneInput = document.getElementById("phone");
+      const conditionInput = document.getElementById("condition");
+      const branchInput = document.getElementById("branch");
+      const dateInput = document.getElementById("date");
 
       const testimonials = [
         {
-          text: "Dr. Sadhike treated my lower back pain with a clear step-by-step plan. Within weeks, I was able to walk and work without fear.",
-          meta: "Amit R. - Boring Road"
+          text: "Dr. Sadhike treated my slip disc without surgery. After 3 weeks of sessions I was back to work.",
+          meta: "Rajesh K., Boring Road"
         },
         {
-          text: "My mother needed paralysis rehabilitation after stroke. The sessions were professional, compassionate, and she improved every week.",
-          meta: "Renu S. - Kankarbagh"
+          text: "My mother had a paralysis stroke. The home visit service was a blessing. She can walk again.",
+          meta: "Priya S., Kankarbagh"
         },
         {
-          text: "I had severe neck and shoulder pain from desk work. The treatment was practical and the exercises were easy to follow at home.",
-          meta: "Nitin P. - Sri Krishna Nagar"
+          text: "Best physiotherapy in Patna. Very professional and the doctor explains everything clearly.",
+          meta: "Amit V., Sri Krishna Nagar"
         }
       ];
 
-      let current = 0;
-      const textEl = document.getElementById("testimonialText");
-      const metaEl = document.getElementById("testimonialMeta");
+      const testimonialCard = document.getElementById("testimonialCard");
+      const testimonialContent = document.getElementById("testimonialContent");
+      const testimonialText = document.getElementById("testimonialText");
+      const testimonialMeta = document.getElementById("testimonialMeta");
+      const testimonialProgress = document.getElementById("testimonialProgress");
+      const testimonialDots = document.querySelectorAll(".testimonial-dot");
       const prevBtn = document.getElementById("prevBtn");
       const nextBtn = document.getElementById("nextBtn");
 
-      function updateTestimonial() {
-        textEl.classList.add("is-swapping");
-        metaEl.classList.add("is-swapping");
+      let currentTestimonial = 0;
+      let testimonialTimer = null;
+      const testimonialDuration = 5000;
 
+      function animateCounter(el, target, duration = 2000) {
+        let start = 0;
+        const step = target / (duration / 16);
+        const timer = setInterval(() => {
+          start += step;
+          if (start >= target) {
+            start = target;
+            clearInterval(timer);
+          }
+          el.textContent = Math.floor(start).toLocaleString() + (el.dataset.suffix || "");
+        }, 16);
+      }
+
+      function setActiveNav(hash) {
+        navLinks.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === hash);
+        });
+      }
+
+      function renderTestimonial(index) {
+        const item = testimonials[index];
+        testimonialContent.classList.remove("ready");
         window.setTimeout(() => {
-          textEl.textContent = testimonials[current].text;
-          metaEl.textContent = testimonials[current].meta;
-          textEl.classList.remove("is-swapping");
-          metaEl.classList.remove("is-swapping");
+          testimonialText.textContent = item.text;
+          testimonialMeta.textContent = item.meta;
+          testimonialDots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+          testimonialContent.classList.add("ready");
         }, 120);
       }
 
-      prevBtn.addEventListener("click", () => {
-        current = (current - 1 + testimonials.length) % testimonials.length;
-        updateTestimonial();
-      });
+      function startProgress() {
+        testimonialProgress.style.transition = "none";
+        testimonialProgress.style.transform = "scaleX(0)";
+        requestAnimationFrame(() => {
+          testimonialProgress.style.transition = `transform ${testimonialDuration}ms linear`;
+          testimonialProgress.style.transform = "scaleX(1)";
+        });
+      }
 
-      nextBtn.addEventListener("click", () => {
-        current = (current + 1) % testimonials.length;
-        updateTestimonial();
-      });
+      function startAutoRotate() {
+        clearInterval(testimonialTimer);
+        startProgress();
+        testimonialTimer = window.setInterval(() => {
+          currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+          renderTestimonial(currentTestimonial);
+          startProgress();
+        }, testimonialDuration);
+      }
+
+      function stopAutoRotate() {
+        clearInterval(testimonialTimer);
+      }
 
       window.addEventListener("scroll", () => {
         if (window.scrollY > 10) {
@@ -1536,43 +1922,166 @@
         }
       });
 
-      const observer = new IntersectionObserver(
-        (entries) => {
+      if (menuToggle && mobileNav) {
+        menuToggle.addEventListener("click", () => {
+          mobileNav.classList.toggle("open");
+        });
+
+        mobileNav.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            mobileNav.classList.remove("open");
+          });
+        });
+      }
+
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("visible");
-              observer.unobserve(entry.target);
+            if (!entry.isIntersecting) {
+              return;
             }
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
           });
         },
         { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
       );
 
-      revealEls.forEach((el) => observer.observe(el));
+      revealEls.forEach((el) => revealObserver.observe(el));
+
+      const sectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id || "home";
+              setActiveNav(`#${id}`);
+            }
+          });
+        },
+        { threshold: 0.35 }
+      );
+
+      document.querySelectorAll("main section[id], main[id='home']").forEach((section) => sectionObserver.observe(section));
+
+      const aboutObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+            counters.forEach((counter) => animateCounter(counter, Number(counter.dataset.target || 0)));
+            window.setTimeout(() => {
+              if (aboutQuote) {
+                aboutQuote.classList.add("visible");
+              }
+            }, 600);
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.35 }
+      );
+
+      if (aboutSection) {
+        aboutObserver.observe(aboutSection);
+      }
+
+      const cardObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+            const delay = Number(entry.target.dataset.delay || 0);
+            window.setTimeout(() => entry.target.classList.add("visible"), delay);
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.2 }
+      );
+
+      conditionCards.forEach((card, index) => {
+        card.dataset.delay = String(index * 80);
+        cardObserver.observe(card);
+      });
+
+      approachCards.forEach((card, index) => {
+        card.dataset.delay = String(index * 150);
+        cardObserver.observe(card);
+      });
+
+      testimonialDots.forEach((dot, i) => {
+        dot.addEventListener("click", () => {
+          currentTestimonial = i;
+          renderTestimonial(currentTestimonial);
+          startAutoRotate();
+        });
+      });
+
+      prevBtn.addEventListener("click", () => {
+        currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+        renderTestimonial(currentTestimonial);
+        startAutoRotate();
+      });
+
+      nextBtn.addEventListener("click", () => {
+        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+        renderTestimonial(currentTestimonial);
+        startAutoRotate();
+      });
+
+      testimonialCard.addEventListener("mouseenter", stopAutoRotate);
+      testimonialCard.addEventListener("mouseleave", startAutoRotate);
+
+      function showToast() {
+        if (!toast) {
+          return;
+        }
+        toast.classList.add("show");
+        window.setTimeout(() => toast.classList.remove("show"), 2500);
+      }
+
+      function validateField(field, test) {
+        const isValid = test(field.value.trim());
+        field.classList.toggle("invalid", !isValid);
+        return isValid;
+      }
+
+      phoneInput.addEventListener("input", () => {
+        phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 10);
+      });
+
+      [nameInput, phoneInput, conditionInput, branchInput, dateInput].forEach((field) => {
+        field.addEventListener("input", () => field.classList.remove("invalid"));
+        field.addEventListener("change", () => field.classList.remove("invalid"));
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const isNameValid = validateField(nameInput, (v) => v.length > 0);
+        const isPhoneValid = validateField(phoneInput, (v) => /^\d{10}$/.test(v));
+        const isConditionValid = validateField(conditionInput, (v) => v.length > 0);
+        const isBranchValid = validateField(branchInput, (v) => v.length > 0);
+        const isDateValid = validateField(dateInput, (v) => v.length > 0);
+
+        if (!isNameValid || !isPhoneValid || !isConditionValid || !isBranchValid || !isDateValid) {
+          alert("Please fill all fields before submitting.");
+          return;
+        }
+
+        const message = `Hello Dr. Sadhike, I would like to book an appointment.\n\n*Name:* ${nameInput.value.trim()}\n*Phone:* +91 ${phoneInput.value.trim()}\n*Condition:* ${conditionInput.value.trim()}\n*Branch:* ${branchInput.value}\n*Preferred Date:* ${dateInput.value}`;
+        showToast();
+        window.open(`https://wa.me/919693614502?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+        form.reset();
+      });
 
       if (yearEl) {
         yearEl.textContent = new Date().getFullYear();
       }
 
-      if (form) {
-        form.addEventListener("submit", (event) => {
-          event.preventDefault();
-          const data = new FormData(form);
-
-          const message = [
-            "Hello, I would like to book an appointment.",
-            `Full Name: ${data.get("fullName")}`,
-            `Mobile Number: ${data.get("mobile")}`,
-            `Condition/Problem: ${data.get("problem")}`,
-            `Preferred Branch: ${data.get("preferredBranch")}`,
-            `Preferred Date: ${data.get("preferredDate")}`
-          ].join("\n");
-
-          const url = `https://wa.me/919693614502?text=${encodeURIComponent(message)}`;
-          window.open(url, "_blank", "noopener");
-          form.reset();
-        });
-      }
+      renderTestimonial(currentTestimonial);
+      startAutoRotate();
+      setActiveNav("#home");
     </script>
   </body>
 </html>
